@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-primary: #FFB700;
+  --color-secondary: #64748b;
+  --color-accent: #f59e0b;
+  --color-muted: #f3f4f6;
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-info: #3b82f6;
+  --color-dark: #0f172a;
+  --color-light: #ffffff;
+  --color-gary: #757D75;
+  --color-brand-light: #ffffff;
+  --color-brand-dark: #0f172a;
+  --color-brand-text-light: #1e293b;
+  --color-brand-text-dark: #f1f5f9;
+
+  /* Fonts */
+  --font-asgard: "Asgard Trial", sans-serif;
+  --font-glancyr: "Glancyr", sans-serif;
+  --font-glancyr-bold: "GlancyrBold", sans-serif;
+  --font-brutalism: "Brutalism", sans-serif;
+
+  /* Animations */
+  --animate-spin-slow: spin 4s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee1: marquee 30s linear infinite;
+  --animate-fadeIn: fadeIn 0.6s ease-out;
+  --animate-slideInUp: slideInUp 0.6s ease-out;
+  --animate-slideInLeft: slideInLeft 0.6s ease-out;
+  --animate-fadeInUp: fadeInUp 0.8s ease-out forwards;
+  --animate-scribble: scribble 1.5s ease-in-out infinite;
+
+  /* Keyframes */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee1 {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInLeft {
+    0% {
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scribble {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'Asgard Trial';
+  src: url('/fonts/AsgardTrial-WideBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Glancyr';
+  src: url('/fonts/glancyr-glancyr-regular-400.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GlancyrBold';
+  src: url('/fonts/glancyr-glancyr-bold-700.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brutalism';
+  src: url('/fonts/y2k-brutalism-font.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Global Styles */
+body {
+  background-color: var(--color-brand-light);
+  color: var(--color-brand-text-light);
+  font-family: var(--font-glancyr);
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.dark body {
+  background-color: var(--color-brand-dark);
+  color: var(--color-brand-text-dark);
+}
+
+/* Utility Classes */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@layer components {
+  .input-primary {
+    @apply w-full border border-gray-300 rounded-xl px-4 py-3 placeholder-gray-500 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-glancyr;
+    background-color: white !important;
+    color: black !important;
+  }
+}

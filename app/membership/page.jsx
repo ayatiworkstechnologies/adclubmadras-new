@@ -1,0 +1,21 @@
+import MainLayout from "@/components/layout/MainLayout";
+import MembershipPageContent from "@/components/pages/Membership/MembershipPage";
+
+export const metadata = {
+    title: "Membership | Ad Club Madras",
+    description: "Join Ad Club Madras and become part of India's premier advertising community. Apply for membership today.",
+    keywords: ["Ad Club Membership", "Join Ad Club Madras", "Advertising Club Membership"],
+    openGraph: {
+        title: "Membership | Ad Club Madras",
+        description: "Join a vibrant community of advertising professionals.",
+        images: ["/Adclub_new.png"],
+    },
+};
+
+export default function MembershipPage() {
+    return (
+        <MainLayout>
+            <MembershipPageContent />
+        </MainLayout>
+    );
+}
