@@ -2,8 +2,8 @@ import MainLayout from "@/components/layout/MainLayout";
 import MembershipPageContent from "@/components/pages/Membership/MembershipPage";
 
 export const metadata = {
-    title: "Membership | Ad Club Madras",
-    description: "Join Ad Club Madras and become part of India's premier advertising community. Apply for membership today.",
+    title: "Membership, Advertising Club Madras – Join Industry Network",
+    description: "Join Advertising Club Madras and become part of a powerful advertising network. Access Gyan Series talks, industry awards, events, and exclusive member privileges.",
     keywords: ["Ad Club Membership", "Join Ad Club Madras", "Advertising Club Membership"],
     openGraph: {
         title: "Membership | Ad Club Madras",

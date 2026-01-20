@@ -2,8 +2,8 @@ import MainLayout from "@/components/layout/MainLayout";
 import AboutPageContent from "@/components/pages/About/AboutPage";
 
 export const metadata = {
-    title: "About Us | Ad Club Madras",
-    description: "Learn about Ad Club Madras - one of India's oldest and most respected advertising communities with over 75 years of legacy.",
+    title: "About Us, Advertising Club Madras – Legacy in Advertising & Creative Leadership",
+    description: "Discover the legacy of Advertising Club Madras, one of India’s oldest advertising forums, fostering creative leadership, knowledge exchange, and industry excellence for over six decades.",
     keywords: ["About Ad Club Madras", "Advertising History Chennai", "Past Presidents", "Executive Committee"],
     openGraph: {
         title: "About Us | Ad Club Madras",

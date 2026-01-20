@@ -12,8 +12,8 @@ import DiscoverMoments from "@/components/pages/Home/DiscoverMoments";
 import PgdaCard from "@/components/pages/Home/PGDA";
 
 export const metadata = {
-    title: "Home | Ad Club Madras",
-    description: "Ad Club Madras is a creative advertising community delivering branding, events, and digital solutions in Chennai, India.",
+    title: "Advertising Club Madras, India’s Premier Advertising & Marketing Forum",
+    description: "Advertising Club Madras is India’s premier advertising and marketing forum with 65+ years of legacy, uniting professionals through learning, awards, events, and industry networking.",
     keywords: ["Ad Club Madras", "Advertising Club Chennai", "Marketing Events", "PGDA Course"],
     openGraph: {
         title: "Ad Club Madras | Home",
