@@ -10,6 +10,7 @@ import JoinUsBanner from "@/components/pages/Home/JoinUsBanner";
 import JoinUsSection from "@/components/pages/Home/JoinUsSection";
 import DiscoverMoments from "@/components/pages/Home/DiscoverMoments";
 import PgdaCard from "@/components/pages/Home/PGDA";
+import { getUpcommingEvents, getEventsCategory, getGalleryPhotos } from "@/lib/api";
 
 export const metadata = {
     title: "Advertising Club Madras, India’s Premier Advertising & Marketing Forum",
@@ -22,7 +23,14 @@ export const metadata = {
     },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+    // Fetch data on the server
+    const [upcomingEvents, eventCategories, galleryPhotos] = await Promise.all([
+        getUpcommingEvents().catch(err => { console.error("Home SSG Error (Events):", err); return []; }),
+        getEventsCategory().catch(err => { console.error("Home SSG Error (Cats):", err); return []; }),
+        getGalleryPhotos().catch(err => { console.error("Home SSG Error (Photos):", err); return []; })
+    ]);
+
     return (
         <MainLayout>
             <AnimatedBackground />
@@ -32,10 +40,14 @@ export default function HomePage() {
             <PgdaCard />
             <WhyJoinUsBanner />
             <EventSection />
-            <UpcomingEvents />
+            <UpcomingEvents
+                initialEvents={upcomingEvents}
+                categories={eventCategories}
+            />
+
             <JoinUsBanner />
             <JoinUsSection />
-            <DiscoverMoments />
+            <DiscoverMoments initialPhotos={galleryPhotos} />
         </MainLayout>
     );
 }

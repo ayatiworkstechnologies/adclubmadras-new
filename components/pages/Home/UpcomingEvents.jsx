@@ -1,65 +1,39 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { getUpcommingEvents, getEventsCategory } from "@/lib/api";
 
-export default function UpcomingEvents() {
+export default function UpcomingEvents({ initialEvents = [], categories = [] }) {
     const router = useRouter();
-    const [events, setEvents] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [eventRes, categoryRes] = await Promise.all([
-                    getUpcommingEvents(),
-                    getEventsCategory(),
-                ]);
+    // Transform data from props
+    const events = useMemo(() => {
+        const categoryMap = {};
+        (categories || []).forEach((cat) => {
+            categoryMap[cat.id] = cat.categoryName;
+        });
 
-                const categoryMap = {};
-                (categoryRes || []).forEach((cat) => {
-                    categoryMap[cat.id] = cat.categoryName;
-                });
+        return (initialEvents || []).map((event) => {
+            const dateObj = new Date(event.eventDate);
+            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            const monthNames = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+            ];
 
-                const transformed = (eventRes || []).map((event) => {
-                    const dateObj = new Date(event.eventDate);
-                    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                    const monthNames = [
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    ];
-
-                    return {
-                        ...event,
-                        title: event.eventTitle,
-                        catname: categoryMap[event.eventCategoryID] || "General",
-                        day: dayNames[dateObj.getDay()],
-                        date: dateObj.getDate(),
-                        month: monthNames[dateObj.getMonth()],
-                        year: dateObj.getFullYear(),
-                    };
-                });
-
-                setEvents(transformed);
-            } catch (error) {
-                console.error("Error fetching events or categories:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
+            return {
+                ...event,
+                title: event.eventTitle,
+                catname: categoryMap[event.eventCategoryID] || "General",
+                day: dayNames[dateObj.getDay()],
+                date: dateObj.getDate(),
+                month: monthNames[dateObj.getMonth()],
+                year: dateObj.getFullYear(),
+            };
+        });
+    }, [initialEvents, categories]);
 
     return (
         <section className="relative bg-black min-h-screen text-white px-4 sm:px-6 md:px-12 py-16 overflow-hidden">

@@ -1,74 +1,23 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { getGallery, getGalleryPhotos } from "@/lib/api";
 import { X, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
-export default function GallaryDetailPage() {
-  const searchParams = useSearchParams();
-  const slugOrId = searchParams.get("id"); // Using 'id' param for consistency
+export default function GallaryDetailPage({ galleryItem, galleryImages }) {
   const router = useRouter();
-  const passedId = slugOrId;
-
-  const [galleryItem, setGalleryItem] = useState(null);
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [previewIndex, setPreviewIndex] = useState(null);
 
-  // Load gallery data fast
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [galleryData, photoData] = await Promise.all([
-          getGallery(),
-          getGalleryPhotos(),
-        ]);
-
-        let selectedGallery;
-        if (passedId) {
-          selectedGallery = galleryData.find((item) => item.id === passedId);
-        } else {
-          const normalizedSlug = decodeURIComponent(slugOrId)
-            .toLowerCase()
-            .replace(/\s+/g, "-");
-          selectedGallery = galleryData.find(
-            (item) =>
-              item.galleryTitle?.toLowerCase().replace(/\s+/g, "-") ===
-              normalizedSlug
-          );
-        }
-
-        if (!selectedGallery) {
-          setGalleryItem(null);
-          setGalleryImages([]);
-        } else {
-          const matchedImages = photoData
-            .filter(
-              (photo) =>
-                photo.productid === selectedGallery.id &&
-                photo.type === "gallery"
-            )
-            .map((img, i) => ({
-              src: img.path || img.thumbnail || "/fallback.jpg",
-              caption: img.caption || `${selectedGallery.galleryTitle}${i + 1}`,
-            }));
-
-          setGalleryItem(selectedGallery);
-          setGalleryImages(matchedImages);
-        }
-      } catch (err) {
-        console.error("Gallery fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [slugOrId, passedId]);
+  // If no item found (handled by parent returning null/empty, or check here)
+  if (!galleryItem) {
+    return (
+      <section className="text-center text-red-500 py-20">
+        <p className="text-xl font-bold">Gallery Event Not Found</p>
+      </section>
+    );
+  }
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -102,17 +51,7 @@ export default function GallaryDetailPage() {
     description,
   } = galleryItem || {};
 
-  // ✅ Loader
-  if (loading) {
-    return (
-      <section className="flex justify-center items-center h-screen bg-black text-white">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          {/* <p className="text-xl font-bold animate-pulse">Loading Gallery Details...</p> */}
-        </div>
-      </section>
-    );
-  }
+
 
   if (!galleryItem) {
     return (
@@ -185,9 +124,9 @@ export default function GallaryDetailPage() {
               <Image
                 src={img.src}
                 alt={`Gallery Image ${index + 1}`}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                className="object-cover hover:scale-105 transition-transform duration-300"
+                width={500}
+                height={300}
+                className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
               />
             </motion.div>
           ))}
@@ -233,14 +172,11 @@ export default function GallaryDetailPage() {
               transition={{ duration: 0.3 }}
               className="max-w-full max-h-[80vh] text-center"
             >
-              <div className="relative w-full h-[70vh]">
-                <Image
-                  src={galleryImages[previewIndex].src}
-                  alt={`Preview ${previewIndex + 1}`}
-                  fill
-                  className="rounded-lg shadow-2xl object-contain mx-auto"
-                />
-              </div>
+              <motion.img
+                src={galleryImages[previewIndex].src}
+                alt={`Preview ${previewIndex + 1}`}
+                className="rounded-lg shadow-2xl max-h-[70vh] mx-auto"
+              />
               <div className="mt-4 text-white text-sm sm:text-base">
                 <span className="block opacity-70">
                   Image {previewIndex + 1} of {galleryImages.length}
@@ -267,4 +203,3 @@ export default function GallaryDetailPage() {
     </section>
   );
 }
-

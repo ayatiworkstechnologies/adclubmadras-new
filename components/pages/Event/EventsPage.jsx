@@ -6,10 +6,10 @@ import { getEventsCategory, getEventsSlug } from "@/lib/api";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useRouter } from "next/navigation";
 
-export default function EventsPageContent() {
+export default function EventsPageContent({ initialCategories = [], initialEvents = [] }) {
     const [events, setEvents] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [activeCategoryID, setActiveCategoryID] = useState("upcoming");
+    const [activeCategoryID, setActiveCategoryID] = useState("all");
 
     const TABS_VISIBLE = 4;
     const [startIndex, setStartIndex] = useState(0);
@@ -65,32 +65,49 @@ export default function EventsPageContent() {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const categoriesData = await getEventsCategory();
-                const formatted = categoriesData.map((cat) => ({
-                    id: cat.id,
-                    name: cat.categoryName,
-                    categorySlug: cat.categorySlug,
-                }));
+        if (initialCategories && initialCategories.length > 0) {
+            const formatted = initialCategories.map((cat) => ({
+                id: cat.id,
+                name: cat.categoryName,
+                categorySlug: cat.categorySlug,
+            }));
 
-                const defaultTabs = [
-                    { id: "all", name: "All", categorySlug: "all" },
-                    { id: "upcoming", name: "Upcoming", categorySlug: "upcoming" },
-                ];
+            const defaultTabs = [
+                { id: "all", name: "All", categorySlug: "all" },
+                { id: "upcoming", name: "Upcoming", categorySlug: "upcoming" },
+            ];
 
-                const mergedTabs = [...defaultTabs, ...formatted];
-                setCategories(mergedTabs);
+            const mergedTabs = [...defaultTabs, ...formatted];
+            setCategories(mergedTabs);
+            setEvents(initialEvents);
+        } else {
+            const fetchData = async () => {
+                try {
+                    const categoriesData = await getEventsCategory();
+                    const formatted = categoriesData.map((cat) => ({
+                        id: cat.id,
+                        name: cat.categoryName,
+                        categorySlug: cat.categorySlug,
+                    }));
 
-                // initial load
-                loadEventsBySlug("all", "all");
-            } catch (err) {
-                console.error("Failed to fetch categories", err);
-            }
-        };
+                    const defaultTabs = [
+                        { id: "all", name: "All", categorySlug: "all" },
+                        { id: "upcoming", name: "Upcoming", categorySlug: "upcoming" },
+                    ];
 
-        fetchData();
-    }, []);
+                    const mergedTabs = [...defaultTabs, ...formatted];
+                    setCategories(mergedTabs);
+
+                    // initial load
+                    loadEventsBySlug("all", "all");
+                } catch (err) {
+                    console.error("Failed to fetch categories", err);
+                }
+            };
+
+            fetchData();
+        }
+    }, [initialCategories, initialEvents]);
 
     const handlePrev = () => {
         setStartIndex((s) => Math.max(0, s - 1));

@@ -1,5 +1,6 @@
 import MainLayout from "@/components/layout/MainLayout";
 import EventsPageContent from "@/components/pages/Event/EventsPage";
+import { getEventsCategory, getEventsSlug } from "@/lib/api";
 
 export const metadata = {
     title: "Events, Advertising Club Madras – Workshops, Talks & Industry Meetups",
@@ -12,10 +13,18 @@ export const metadata = {
     },
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+    const [categoriesData, initialEvents] = await Promise.all([
+        getEventsCategory().catch(err => { console.error("Events SSG Error (Cats):", err); return []; }),
+        getEventsSlug("all").catch(err => { console.error("Events SSG Error (Events):", err); return []; })
+    ]);
+
     return (
         <MainLayout>
-            <EventsPageContent />
+            <EventsPageContent
+                initialCategories={categoriesData}
+                initialEvents={initialEvents}
+            />
         </MainLayout>
     );
 }

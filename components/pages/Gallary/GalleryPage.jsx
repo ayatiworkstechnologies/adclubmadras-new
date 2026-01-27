@@ -149,9 +149,9 @@ export default function GallaryPage() {
       ) : (
         <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredEvents.map((event) => {
-            const photo = galleryPhotos.find((p) => p.productid === event.id && p.type === "gallery");
+            const photo = galleryPhotos.find((p) => p.productid === event.id);
             const eventImage = photo?.path;
-            const slug = generateSlug(event.galleryTitle, event.id);
+            const slug = event.gallerySlug || generateSlug(event.galleryTitle, event.id);
 
             return (
               <div
@@ -159,7 +159,7 @@ export default function GallaryPage() {
                 className="relative bg-primary rounded-xl border-2 border-primary overflow-hidden shadow-lg transition-transform hover:scale-105 duration-300 flex flex-col"
               >
                 <div
-                  onClick={() => router.push(`/gallery/details?id=${event.id}`)}
+                  onClick={() => router.push(`/gallery/${slug}`)}
                   className="relative w-full h-40 sm:h-48 cursor-pointer group"
                 >
                   {eventImage ? (
@@ -199,7 +199,7 @@ export default function GallaryPage() {
 
                   <motion.button
                     whileHover={{ scale: 1.05 }}
-                    onClick={() => router.push(`/gallery/details?id=${event.id}`)}
+                    onClick={() => router.push(`/gallery/${slug}`)}
                     className="mt-auto flex justify-center items-left text-asgard font-bold"
                   >
                     <span className="px-6 py-3 bg-black text-white hover:text-black rounded-full font-bold hover:bg-white transition-all duration-300">

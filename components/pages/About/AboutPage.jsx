@@ -24,7 +24,7 @@ const fadeVariants = {
     exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
 };
 
-export default function AboutPageContent() {
+export default function AboutPageContent({ initialCommittee, initialPresidents }) {
     const [activeTab, setActiveTab] = useState("about");
     const { darkMode } = useTheme();
     const sectionBg = darkMode ? "bg-black text-white" : "bg-white text-black";
@@ -61,8 +61,8 @@ export default function AboutPageContent() {
 
                             <span
                                 className={`relative z-10 px-4 py-2 transition-all duration-300 ${activeTab === tab.id
-                                        ? "text-primary font-bold scale-105"
-                                        : "text-white hover:text-primary"
+                                    ? "text-primary font-bold scale-105"
+                                    : "text-white hover:text-primary"
                                     }`}
                             >
                                 {tab.label}
@@ -102,7 +102,7 @@ export default function AboutPageContent() {
                                 <h2 className="text-xl sm:text-2xl uppercase font-bold font-asgard mb-4">
                                     Past Presidents
                                 </h2>
-                                <PastPresidentsGrid />
+                                <PastPresidentsGrid initialPresidents={initialPresidents} />
                             </motion.div>
                         )}
 
@@ -117,7 +117,7 @@ export default function AboutPageContent() {
                                 <h2 className="text-xl sm:text-2xl uppercase font-bold font-asgard mb-4">
                                     Executive Committee
                                 </h2>
-                                <TimelineComponent />
+                                <TimelineComponent initialCommittee={initialCommittee} />
                             </motion.div>
                         )}
 

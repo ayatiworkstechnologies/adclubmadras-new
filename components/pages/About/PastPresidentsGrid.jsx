@@ -21,29 +21,34 @@ const cardVariants = {
   }),
 };
 
-const PastPresidentsGrid = () => {
+const PastPresidentsGrid = ({ initialPresidents }) => {
   const [pastPresidents, setPastPresidents] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const presidentsData = await getPastPresidents();
-
-        // Sort by starting year in descending order
-        const sortedData = presidentsData.sort((a, b) => {
-          const startYearA = parseInt(a.yearRange.split("–")[0].trim());
-          const startYearB = parseInt(b.yearRange.split("–")[0].trim());
-          return startYearB - startYearA; // Descending
-        });
-
-        setPastPresidents(sortedData);
-      } catch (error) {
-        console.error("API fetch error:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (initialPresidents && initialPresidents.length > 0) {
+      const sortedData = [...initialPresidents].sort((a, b) => {
+        const startYearA = parseInt(a.yearRange.split("–")[0].trim());
+        const startYearB = parseInt(b.yearRange.split("–")[0].trim());
+        return startYearB - startYearA;
+      });
+      setPastPresidents(sortedData);
+    } else {
+      const fetchData = async () => {
+        try {
+          const presidentsData = await getPastPresidents();
+          const sortedData = presidentsData.sort((a, b) => {
+            const startYearA = parseInt(a.yearRange.split("–")[0].trim());
+            const startYearB = parseInt(b.yearRange.split("–")[0].trim());
+            return startYearB - startYearA;
+          });
+          setPastPresidents(sortedData);
+        } catch (error) {
+          console.error("API fetch error:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [initialPresidents]);
 
   return (
     <div className="dark:bg-black dark:text-white bg-white text-black min-h-screen py-10 px-4">

@@ -1,35 +1,21 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { getGalleryPhotos } from "@/lib/api";
 
-export default function DiscoverMoments() {
+export default function DiscoverMoments({ initialPhotos = [] }) {
     const router = useRouter();
-    const [images, setImages] = useState([]);
     const marqueeControls = useAnimation();
     const marqueeRef = useRef();
 
-    useEffect(() => {
-        const fetchPhotos = async () => {
-            try {
-                const photos = await getGalleryPhotos();
-
-                const filtered = (photos || [])
-                    .filter((item) => item.type === "gallery" && item.path)
-                    .slice(-15);
-
-                const paths = filtered.map((item) => item.path);
-                setImages(paths);
-            } catch (error) {
-                console.error("Error fetching gallery photos:", error);
-            }
-        };
-
-        fetchPhotos();
-    }, []);
+    const images = useMemo(() => {
+        return (initialPhotos || [])
+            .filter((item) => item.type === "gallery" && item.path)
+            .slice(-15)
+            .map((item) => item.path);
+    }, [initialPhotos]);
 
     useEffect(() => {
         marqueeControls.start({

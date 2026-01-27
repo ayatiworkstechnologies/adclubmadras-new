@@ -1,5 +1,6 @@
 import MainLayout from "@/components/layout/MainLayout";
 import AboutPageContent from "@/components/pages/About/AboutPage";
+import { getExecutiveCommittee, getPastPresidents } from "@/lib/api";
 
 export const metadata = {
     title: "About Us, Advertising Club Madras – Legacy in Advertising & Creative Leadership",
@@ -12,10 +13,18 @@ export const metadata = {
     },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+    const [committeeData, presidentsData] = await Promise.all([
+        getExecutiveCommittee().catch(err => { console.error("About SSG Error (Committee):", err); return null; }),
+        getPastPresidents().catch(err => { console.error("About SSG Error (Presidents):", err); return []; })
+    ]);
+
     return (
         <MainLayout>
-            <AboutPageContent />
+            <AboutPageContent
+                initialCommittee={committeeData}
+                initialPresidents={presidentsData}
+            />
         </MainLayout>
     );
 }
